@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const router = express();
 
 //temporal testing data
@@ -24,19 +25,19 @@ let notes = [
 ];
 
 //get All notes
-router.get('', (_, res) => {
+router.get('', cors(), (_, res) => {
   res.json(notes);
 });
 
 //get one note
-router.get('/:id', (req, res) => {
+router.get('/:id', cors(), (req, res) => {
   const note = notes.find((note) => note.id === +req.params.id);
   if (!note) res.status(404).send('<h3> La nota no existe!</h3>');
   res.status(200).json(note);
 });
 
 //update note
-router.put('/:id', (req, res) => {
+router.put('/:id', cors(), (req, res) => {
   const { note } = req.body;
   if (!note) res.status(400).json({ error: 'missing note' });
   notes = notes.map((nt) => {
@@ -49,7 +50,7 @@ router.put('/:id', (req, res) => {
 });
 
 //add new note
-router.post('/', (req, res) => {
+router.post('/', cors(), (req, res) => {
   console.log(req.body);
   const { note: noteToAdd } = req.body;
 
@@ -70,7 +71,7 @@ router.post('/', (req, res) => {
 });
 
 //delete a note
-router.delete('/:id', (req, res) => {
+router.delete('/:id', cors(), (req, res) => {
   notes = notes.filter((note) => note.id !== +req.params.id);
   console.log(notes);
   res.status(204).end();
