@@ -5,9 +5,10 @@ const cors = require('cors');
 const PORT = process.env.PORT || 3001;
 const app = express();
 app.use(express.json());
-app.use(cors());
 
-app.use((req, res, next) => {
+//Cors config
+app.use(cors());
+app.use((_, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header(
     'Access-Control-Allow-Headers',
@@ -18,16 +19,15 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/', (_, res) => {
-  res.send('<h1>Hello there</h1>');
-});
+app.get('/', (req, res)=> res.send(`<h1>there is nothing here</h1>`));
 
 app.use('/api/notes', NotesRouter);
 
+//Page not found handler
 app.use((_, res) => {
   res.status(404).end('404');
 });
 
-// app.listen(PORT, () => {
-//   console.log(`yay! the server is running on port ${PORT}`);
-// });
+app.listen(PORT, () => {
+  console.log(`yay! the server is running on port ${PORT}`);
+});
