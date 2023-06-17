@@ -28,6 +28,6 @@ app.use((_, res) => {
   res.status(404).end('404');
 });
 
-app.listen(PORT, () => {
-  console.log(`yay! the server is running on port ${PORT}`);
-});
+// app.listen(PORT, () => {
+//   console.log(`yay! the server is running on port ${PORT}`);
+// });
