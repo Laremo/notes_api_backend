@@ -11,17 +11,7 @@ router.get('/', notesController.GetAllNotes);
 router.get('/:id', notesController.getOneNote);
 
 //update note
-router.put('/:id', (req, res) => {
-  const { note } = req.body;
-  if (!note) res.status(400).json({ error: 'missing note' });
-  notes = notes.map((nt) => {
-    if (nt.id === note.id) {
-      return note;
-    }
-    return nt;
-  });
-  res.status(200).json(note);
-});
+router.put('/:id', notesController.UpdateNote);
 
 //add new note
 router.post('/', notesController.SaveNote);

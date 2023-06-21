@@ -8,7 +8,23 @@ notesController.SaveNote = (req, res) => {
       res.status(400).json({ error: 'content is missing' });
     }
     const { status, response, note } = notesService.SaveNote(noteToAdd);
-    res.json({ response, note });
+    res.status(status).json({ response, note });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+notesController.UpdateNote = (req, res) => {
+  try {
+    const { note: noteToUpdate } = req.body;
+    if (noteToUpdate.id !== +req.params.id)
+      res.status(400).json({ error: 'Bad request' });
+    if (!noteToUpdate || !noteToUpdate.content) {
+      res.status(400).json({ error: 'missing content' });
+    }
+    const { status, response, note } = notesService.UpdateNote(noteToUpdate);
+    res.status(status).json({ response, note });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.message });

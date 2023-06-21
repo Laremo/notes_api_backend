@@ -2,7 +2,7 @@ const dbNotesService = {};
 
 let savedNotes = [
   {
-    id: 1,
+    id: 9,
     content: 'HTML is easy',
     date: '2019-05-30T17:30:31.098Z',
     important: true,
@@ -44,16 +44,18 @@ dbNotesService.getOneNote = (id) => {
 dbNotesService.saveNote = (note, isNew = true) => {
   try {
     if (isNew) {
-      const id = savedNotes.reduce(
-        (id, currentId) => (id > currentId ? id : currentId),
+      //Obtener el máximo Id
+      const { id } = savedNotes.reduce(
+        (note, currentNote) => (note.id > currentNote.id ? note : currentNote),
         0
       );
-      console.log(id);
       note.id = id + 1;
       savedNotes.push(note);
       return { result: 1, note };
     }
+    console.log(note);
     const index = savedNotes.findIndex((nt) => nt.id === note.id);
+    if (index === -1) return { result: 0 };
     savedNotes[index] = note;
     return { result: 1, note };
   } catch (error) {

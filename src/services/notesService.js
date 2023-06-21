@@ -1,6 +1,28 @@
 const dbNotesService = require('../database/dbNotesService');
 const notesService = {};
 
+notesService.SaveNote = (noteToSave) => {
+  try {
+    const { result, note } = dbNotesService.saveNote(noteToSave);
+    if (result === 1) return { status: 200, response: 'Saved changes', note };
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+notesService.UpdateNote = (noteToUpdate) => {
+  try {
+    const { result, note } = dbNotesService.saveNote(noteToUpdate, false);
+    if (result === 1) return { status: 200, response: 'Saved changes', note };
+    if (result === 0)
+      return { status: 400, response: 'This note does not exist' };
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 notesService.getAllNotes = () => {
   try {
     const notes = dbNotesService.getAllNotes();
@@ -17,16 +39,6 @@ notesService.getOneNote = (id) => {
     const note = dbNotesService.getOneNote(id);
     if (!note) return { status: 204, note: 'Note does not exist' };
     return { status: 200, note };
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-};
-
-notesService.SaveNote = (noteToSave) => {
-  try {
-    const { result, note } = dbNotesService.saveNote(noteToSave);
-    if (result === 1) return { status: 200, response: 'Saved changes', note };
   } catch (error) {
     console.log(error);
     throw error;
