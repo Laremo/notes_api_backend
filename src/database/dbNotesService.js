@@ -31,14 +31,31 @@ dbNotesService.getAllNotes = () => {
   }
 };
 
+dbNotesService.getOneNote = (id) => {
+  try {
+    const note = savedNotes.filter((note) => note.id === id);
+    return note;
+  } catch (error) {
+    console.timeLog(error);
+    throw new Error(error);
+  }
+};
+
 dbNotesService.saveNote = (note, isNew = true) => {
   try {
     if (isNew) {
+      const id = savedNotes.reduce(
+        (id, currentId) => (id > currentId ? id : currentId),
+        0
+      );
+      console.log(id);
+      note.id = id + 1;
       savedNotes.push(note);
-      return 1;
+      return { result: 1, note };
     }
     const index = savedNotes.findIndex((nt) => nt.id === note.id);
     savedNotes[index] = note;
+    return { result: 1, note };
   } catch (error) {
     console.log(error);
     throw new Error(error);

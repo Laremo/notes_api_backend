@@ -8,11 +8,7 @@ const router = express();
 router.get('/', notesController.GetAllNotes);
 
 //get one note
-router.get('/:id', (req, res) => {
-  const note = notes.find((note) => note.id === +req.params.id);
-  if (!note) res.status(404).send('<h3> La nota no existe!</h3>');
-  res.status(200).json(note);
-});
+router.get('/:id', notesController.getOneNote);
 
 //update note
 router.put('/:id', (req, res) => {
@@ -28,25 +24,7 @@ router.put('/:id', (req, res) => {
 });
 
 //add new note
-router.post('/', (req, res) => {
-  console.log(req.body);
-  const { note: noteToAdd } = req.body;
-
-  if (!noteToAdd || !noteToAdd.content)
-    return res.status(400).json({
-      error: 'content is missing',
-    });
-
-  const ids = notes.map((note) => note.id);
-  const maxId = Math.max(...ids);
-  noteToAdd.id = maxId + 1;
-  noteToAdd.date = new Date().toISOString();
-  noteToAdd.important =
-    typeof noteToAdd.important === 'undefined' ? false : noteToAdd.important;
-  notes.push(noteToAdd);
-
-  res.status(201).json(noteToAdd);
-});
+router.post('/', notesController.SaveNote);
 
 //delete a note
 router.delete('/:id', (req, res) => {
