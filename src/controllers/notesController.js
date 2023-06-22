@@ -52,4 +52,16 @@ notesController.getOneNote = (req, res) => {
   }
 };
 
+notesController.DeleteNote = (req, res) => {
+  try {
+    const id = +req.params.id;
+    const { status, message } = notesService.DeleteNote(id);
+    if (status === 204) res.status(200).json(message);
+    else res.status(status).json(message);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = notesController;

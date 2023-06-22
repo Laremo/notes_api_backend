@@ -17,10 +17,6 @@ router.put('/:id', notesController.UpdateNote);
 router.post('/', notesController.SaveNote);
 
 //delete a note
-router.delete('/:id', (req, res) => {
-  notes = notes.filter((note) => note.id !== +req.params.id);
-  console.log(notes);
-  res.status(204).end();
-});
+router.delete('/:id', notesController.DeleteNote);
 
 module.exports = router;

@@ -45,4 +45,15 @@ notesService.getOneNote = (id) => {
   }
 };
 
+notesService.DeleteNote = (id) => {
+  try {
+    const { result } = dbNotesService.DeleteNote(id);
+    if (result === 0) return { status: 404, message: 'Note does not exist' };
+    
+    return { status: 204, message: 'Note Successfully deleted' };
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = notesService;

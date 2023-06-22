@@ -64,4 +64,18 @@ dbNotesService.saveNote = (note, isNew = true) => {
   }
 };
 
+dbNotesService.DeleteNote = (id) => {
+  try {
+    const indexToEliminate = savedNotes.findIndex((note) => note.id === id);
+    if (indexToEliminate === -1) return { result: 0 };
+
+    const notes = savedNotes.filter((note) => note.id !== id);
+    savedNotes = notes;
+    
+    return { result: 1 };
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
 module.exports = dbNotesService;
