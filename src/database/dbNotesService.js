@@ -25,37 +25,24 @@ let savedNotes = [
   },
 ];
 
-// Connection
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
-// console.log(process.env);
-
-mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then((con) => console.log(con.models));
-
-dbNotesService.getAllNotes = () => {
+dbNotesService.getAllNotes = async () => {
   try {
-    const firstNote = new NotesModel({
-      id: 10,
-      content: 'First Note on MONGO',
-      important: false,
-    });
-    if (firstNote.save()) console.log('saved!');
-    else console.log('could not save!');
-
-    return savedNotes;
+    const notes = await NotesModel.find();
+    return notes;
   } catch (error) {
     console.log(error);
     throw new Error(error);
   }
 };
 
-dbNotesService.getOneNote = (id) => {
+dbNotesService.getOneNote = async (id) => {
   try {
-    const note = savedNotes.filter((note) => note.id === id);
+    const note = await NotesModel.find({ id: id });
     return note;
   } catch (error) {
     console.timeLog(error);
@@ -63,30 +50,41 @@ dbNotesService.getOneNote = (id) => {
   }
 };
 
-dbNotesService.saveNote = (note, isNew = true) => {
+dbNotesService.saveNote = async (note, isNew = true) => {
   try {
+    const retrievedNotes = await dbNotesService.getAllNotes();
     if (isNew) {
+      retrievedNotes.forEach((nt) => {
+        if (nt.content === note.content && nt.important === note.important)
+          throw new Error('This note already exists');
+      });
       //Obtener el máximo Id
-      const { id } = savedNotes.reduce(
+      const { id } = retrievedNotes.reduce(
         (note, currentNote) => (note.id > currentNote.id ? note : currentNote),
-        0
+        { id: 0 }
       );
       note.id = id + 1;
-      savedNotes.push(note);
-      return { result: 1, note };
+      const toSave = new NotesModel(note);
+      if (toSave.save()) return { result: 1, note };
+      return { result: 0 };
     }
-    console.log(note);
-    const index = savedNotes.findIndex((nt) => nt.id === note.id);
-    if (index === -1) return { result: 0 };
-    savedNotes[index] = note;
-    return { result: 1, note };
+
+    //use Update({id: note.id}, {set:{datos}})
+    // const retrievedNote = await NotesModel.findOne({ id: note.id });
+    // if (!retrievedNote) return { result: 0 };
+    const result = await NotesModel.findOneAndUpdate(
+      { id: note.id },
+      { content: note.content, important: note.important },
+      { new: true }
+    );
+    if (!result) return { result: 0 };
+    else return { result: 1, note: result };
   } catch (error) {
-    console.log(error);
     throw new Error(error);
   }
 };
 
-dbNotesService.DeleteNote = (id) => {
+dbNotesService.DeleteNote = async (id) => {
   try {
     const indexToEliminate = savedNotes.findIndex((note) => note.id === id);
     if (indexToEliminate === -1) return { result: 0 };
