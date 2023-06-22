@@ -19,7 +19,8 @@ app.use((_, res, next) => {
   next();
 });
 
-app.get('/', (req, res)=> res.send(`<h1>there is nothing here</h1>`));
+
+app.get('/', (req, res) => res.send(`<h1>there is nothing here</h1>`));
 
 app.use('/api/notes', NotesRouter);
 

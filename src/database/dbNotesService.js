@@ -1,4 +1,8 @@
+const mongoose = require('mongoose');
+const NotesModel = require('../models/NotesSchema');
 const dbNotesService = {};
+const dotenv = require('dotenv');
+dotenv.config({ path: '.env' });
 
 let savedNotes = [
   {
@@ -21,10 +25,28 @@ let savedNotes = [
   },
 ];
 
+// Connection
+
+// console.log(process.env);
+
+mongoose
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then((con) => console.log(con.models));
+
 dbNotesService.getAllNotes = () => {
   try {
-    const notes = savedNotes;
-    return notes;
+    const firstNote = new NotesModel({
+      id: 10,
+      content: 'First Note on MONGO',
+      important: false,
+    });
+    if (firstNote.save()) console.log('saved!');
+    else console.log('could not save!');
+
+    return savedNotes;
   } catch (error) {
     console.log(error);
     throw new Error(error);
@@ -71,7 +93,7 @@ dbNotesService.DeleteNote = (id) => {
 
     const notes = savedNotes.filter((note) => note.id !== id);
     savedNotes = notes;
-    
+
     return { result: 1 };
   } catch (error) {
     console.log(error);
