@@ -4,27 +4,6 @@ const dbNotesService = {};
 const dotenv = require('dotenv');
 dotenv.config({ path: '.env' });
 
-let savedNotes = [
-  {
-    id: 9,
-    content: 'HTML is easy',
-    date: '2019-05-30T17:30:31.098Z',
-    important: true,
-  },
-  {
-    id: 2,
-    content: 'Browser can execute only JavaScript',
-    date: '2019-05-30T18:39:34.091Z',
-    important: false,
-  },
-  {
-    id: 3,
-    content: 'GET and POST are the most important methods of HTTP protocol',
-    date: '2019-05-30T19:20:14.298Z',
-    important: true,
-  },
-];
-
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -69,13 +48,10 @@ dbNotesService.saveNote = async (note, isNew = true) => {
       return { result: 0 };
     }
 
-    //use Update({id: note.id}, {set:{datos}})
-    // const retrievedNote = await NotesModel.findOne({ id: note.id });
-    // if (!retrievedNote) return { result: 0 };
     const result = await NotesModel.findOneAndUpdate(
       { id: note.id },
       { content: note.content, important: note.important },
-      { new: true }
+      { new: true } //return the updated document
     );
     if (!result) return { result: 0 };
     else return { result: 1, note: result };
@@ -86,12 +62,9 @@ dbNotesService.saveNote = async (note, isNew = true) => {
 
 dbNotesService.DeleteNote = async (id) => {
   try {
-    const indexToEliminate = savedNotes.findIndex((note) => note.id === id);
-    if (indexToEliminate === -1) return { result: 0 };
-
-    const notes = savedNotes.filter((note) => note.id !== id);
-    savedNotes = notes;
-
+    const result = await NotesModel.findOneAndRemove({ id: id });
+    console.log(result);
+    if (!result) return { result: 0 };
     return { result: 1 };
   } catch (error) {
     console.log(error);
