@@ -6,7 +6,6 @@ notesService.SaveNote = async (noteToSave) => {
     const { result, note } = await dbNotesService.saveNote(noteToSave);
     if (result === 1) return { status: 200, response: 'Saved changes', note };
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -18,7 +17,6 @@ notesService.UpdateNote = async (noteToUpdate) => {
     if (result === 0)
       return { status: 400, response: 'This note does not exist' };
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -29,7 +27,6 @@ notesService.getAllNotes = async () => {
     if (notes.length === 0) return 'No saved Notes';
     return notes;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -40,7 +37,6 @@ notesService.getOneNote = async (id) => {
     if (!note.length) return { status: 404, note: 'Note does not exist' };
     return { status: 200, note };
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };

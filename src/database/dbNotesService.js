@@ -4,7 +4,11 @@ const dbNotesService = {};
 const dotenv = require('dotenv');
 dotenv.config({ path: '.env' });
 
-mongoose.connect(process.env.MONGO_URI, {
+const { MONGO_URI, MONGODB_URI_TEST, NODE_ENV } = process.env;
+
+const connectionString = NODE_ENV === 'test' ? MONGODB_URI_TEST : MONGO_URI;
+
+mongoose.connect(connectionString, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -14,7 +18,6 @@ dbNotesService.getAllNotes = async () => {
     const notes = await NotesModel.find();
     return notes;
   } catch (error) {
-    console.log(error);
     throw new Error(error);
   }
 };
@@ -24,7 +27,6 @@ dbNotesService.getOneNote = async (id) => {
     const note = await NotesModel.find({ id: id });
     return note;
   } catch (error) {
-    console.timeLog(error);
     throw new Error(error);
   }
 };
@@ -63,11 +65,9 @@ dbNotesService.saveNote = async (note, isNew = true) => {
 dbNotesService.DeleteNote = async (id) => {
   try {
     const result = await NotesModel.findOneAndRemove({ id: id });
-    console.log(result);
     if (!result) return { result: 0 };
     return { result: 1 };
   } catch (error) {
-    console.log(error);
     throw new Error(error);
   }
 };

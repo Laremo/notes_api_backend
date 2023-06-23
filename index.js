@@ -19,7 +19,6 @@ app.use((_, res, next) => {
   next();
 });
 
-
 app.get('/', (req, res) => res.send(`<h1>there is nothing here</h1>`));
 
 app.use('/api/notes', NotesRouter);
@@ -32,3 +31,5 @@ app.use((_, res) => {
 app.listen(PORT, () => {
   console.log(`yay! the server is running on port ${PORT}`);
 });
+
+module.exports = app;
