@@ -23,6 +23,8 @@ app.get('/', (req, res) => res.send(`<h1>there is nothing here</h1>`));
 
 app.use('/api/notes', NotesRouter);
 
+//Crear controlador, servicios y middlewares para users :3
+
 //Page not found handler
 app.use((_, res) => {
   res.status(404).end('404');

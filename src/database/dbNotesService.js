@@ -17,7 +17,12 @@ dbNotesService.getAllNotes = async () => {
   try {
     const notes = await NotesModel.find();
     const cleanedNotes = notes.map((note) => {
-      return { id: note.id, content: note.content, important: note.important };
+      return {
+        id: note.id,
+        content: note.content,
+        important: note.important,
+        date: note.date,
+      };
     });
     return cleanedNotes;
   } catch (error) {
@@ -37,6 +42,7 @@ dbNotesService.getOneNote = async (id) => {
 dbNotesService.saveNote = async (note, isNew = true) => {
   try {
     const retrievedNotes = await dbNotesService.getAllNotes();
+    if (!note?.date) note.date = new Date();
     if (isNew) {
       retrievedNotes.forEach((nt) => {
         if (nt.content === note.content && nt.important === note.important)

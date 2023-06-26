@@ -5,7 +5,7 @@ notesController.SaveNote = async (req, res) => {
   try {
     const { note: noteToAdd } = req.body;
     if (!noteToAdd || !noteToAdd.content) {
-      res.status(400).json({ error: 'content is missing' });
+      return res.status(400).json({ error: 'content is missing' });
     }
     const { status, response, note } = await notesService.SaveNote(noteToAdd);
     res.status(status).json({ response, note });
