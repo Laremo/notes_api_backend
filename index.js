@@ -28,8 +28,8 @@ app.use((_, res) => {
   res.status(404).end('404');
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`yay! the server is running on port ${PORT}`);
 });
 
-module.exports = app;
+module.exports = { app, server };

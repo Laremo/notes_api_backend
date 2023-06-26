@@ -16,7 +16,10 @@ mongoose.connect(connectionString, {
 dbNotesService.getAllNotes = async () => {
   try {
     const notes = await NotesModel.find();
-    return notes;
+    const cleanedNotes = notes.map((note) => {
+      return { id: note.id, content: note.content, important: note.important };
+    });
+    return cleanedNotes;
   } catch (error) {
     throw new Error(error);
   }
