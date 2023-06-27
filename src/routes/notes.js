@@ -2,8 +2,6 @@ const express = require('express');
 const notesController = require('../controllers/notesController');
 const router = express();
 
-//temporal testing data
-
 //get All notes
 router.get('/', notesController.GetAllNotes);
 

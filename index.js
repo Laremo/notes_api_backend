@@ -1,6 +1,7 @@
 const express = require('express');
 const NotesRouter = require('./src/routes/notes');
 const cors = require('cors');
+const usersRouter = require('./src/routes/users');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -24,6 +25,7 @@ app.get('/', (req, res) => res.send(`<h1>there is nothing here</h1>`));
 app.use('/api/notes', NotesRouter);
 
 //Crear controlador, servicios y middlewares para users :3
+app.use('/api/users', usersRouter);
 
 //Page not found handler
 app.use((_, res) => {

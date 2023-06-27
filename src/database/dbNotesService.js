@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const NotesModel = require('../models/NotesSchema');
-const dbNotesService = {};
 const dotenv = require('dotenv');
 dotenv.config({ path: '.env' });
+const dbNotesService = {};
 
 const { MONGO_URI, MONGODB_URI_TEST, NODE_ENV } = process.env;
 
