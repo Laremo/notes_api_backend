@@ -16,7 +16,7 @@ UserSchema.set('toJSON', {
   transform: (document, returnedObjeect) => {
     returnedObjeect.id = returnedObjeect._id;
     delete returnedObjeect._id;
-    delete returnedObjeect._v;
+    delete returnedObjeect.__v;
 
     delete returnedObjeect.passwordHash;
   },

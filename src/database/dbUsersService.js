@@ -14,6 +14,8 @@ mongoose.connect(connectionString, {
 
 dbUsersService.getAllUsers = async () => {
   try {
+    const retrievedUsers = await User.find();
+    return retrievedUsers;
   } catch (error) {
     throw error;
   }
