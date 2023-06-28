@@ -39,24 +39,33 @@ dbNotesService.getOneNote = async (id) => {
   }
 };
 
-dbNotesService.saveNote = async (note, isNew = true) => {
+dbNotesService.saveNote = async (note, isNew = true, user = undefined) => {
   try {
     const retrievedNotes = await dbNotesService.getAllNotes();
     if (!note?.date) note.date = new Date();
     if (isNew) {
-      retrievedNotes.forEach((nt) => {
-        if (nt.content === note.content && nt.important === note.important)
-          throw new Error('This note already exists');
-      });
+      // retrievedNotes.forEach((nt) => {
+      //   if (nt.content === note.content && nt.important === note.important)
+      //     throw new Error('This note already exists');
+      // });
       //Obtener el máximo Id
       const { id } = retrievedNotes.reduce(
         (note, currentNote) => (note.id > currentNote.id ? note : currentNote),
         { id: 0 }
       );
       note.id = id + 1;
-      const toSave = new NotesModel(note);
-      if (toSave.save()) return { result: 1, note };
-      return { result: 0 };
+      const toSave = new NotesModel({
+        id: note.id,
+        content: note.content,
+        date: note.date,
+        important: note.important,
+        user: user._id,
+      });
+
+      const savedNote = await toSave.save();
+      user.notes = user.notes.concat(savedNote._id);
+      user.save();
+      return { result: 1, savedNote };
     }
 
     const result = await NotesModel.findOneAndUpdate(

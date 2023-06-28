@@ -1,4 +1,5 @@
 const dbNotesService = require('../database/dbNotesService');
+const dbUserService = require('../database/dbUsersService');
 const notesService = {};
 
 const cleanNoteData = ({ id, content, important, date }) => {
@@ -7,7 +8,13 @@ const cleanNoteData = ({ id, content, important, date }) => {
 
 notesService.SaveNote = async (noteToSave) => {
   try {
-    const { result, note } = await dbNotesService.saveNote(noteToSave);
+    const user = await dbUserService.getOneUser(noteToSave.user);
+    if (!user) return { status: 400, response: 'User does not exist' };
+    const { result, note } = await dbNotesService.saveNote(
+      noteToSave,
+      true,
+      user
+    );
     if (result === 1) return { status: 200, response: 'Saved changes', note };
   } catch (error) {
     throw error;

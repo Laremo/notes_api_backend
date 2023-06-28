@@ -6,7 +6,8 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node index",
     "uwu": "cross-env NODE_ENV=development nodemon index.js",
-    "test": "cross-env NODE_ENV=test jest --verbose --silent",
+    "test": "cross-env NODE_ENV=test jest --verbose --silent tests/notes.test.js",
+    "test_users": "cross-env NODE_ENV=test PORT=3002 jest --verbose --silent tests/users.test.js",
     "test:watch": "npm run test -- --watch"
   },
   "author": "laremo",

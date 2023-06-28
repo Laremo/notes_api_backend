@@ -22,11 +22,16 @@ usersController.getOneUser = async (req, res) => {
 usersController.saveUser = async (req, res) => {
   try {
     const { user } = req.body;
+    if (!user)
+      return res
+        .status(400)
+        .json({ ok: false, savedUser: 'User info is missing' });
+
     const { ok, status, savedUser } = await UsersService.saveUser(user);
     res.status(status).json({ ok, savedUser });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ ok: false, error: error.message });
+    res.status(500).json({ ok: false, savedUser: error.message });
   }
 };
 
