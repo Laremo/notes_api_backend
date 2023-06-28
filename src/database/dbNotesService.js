@@ -18,7 +18,7 @@ dbNotesService.getAllNotes = async () => {
     const notes = await NotesModel.find();
     const cleanedNotes = notes.map((note) => {
       return {
-        id: note.id,
+        id: note._id,
         content: note.content,
         important: note.important,
         date: note.date,

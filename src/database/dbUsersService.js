@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const User = require('../models/User');
+const Note = require('../models/NotesSchema');
 const dotenv = require('dotenv');
 dotenv.config({ path: '.env' });
 const dbUsersService = {};
@@ -23,14 +24,20 @@ dbUsersService.getAllUsers = async () => {
 
 dbUsersService.getOneUser = async (id) => {
   try {
+    const user = User.findById(id);
+    return user;
   } catch (error) {
     throw error;
   }
 };
 
-dbUsersService.saveUser = async (user) => {
+dbUsersService.saveUser = async ({ username, name, password }) => {
   try {
-    const toSave = new User(user);
+    const toSave = new User({
+      username: username,
+      name: name,
+      passwordHash: password,
+    });
     const savedUser = await toSave.save();
     return savedUser;
   } catch (error) {
@@ -40,13 +47,31 @@ dbUsersService.saveUser = async (user) => {
 
 dbUsersService.updateUser = async (user) => {
   try {
+    const result = await User.findByIdAndUpdate(
+      user.id,
+      {
+        $set: {
+          username: user.username,
+          name: user.name,
+          passwordHash: user.password,
+          notes: user.notes,
+        },
+      },
+      { new: true }
+    );
+    return result;
   } catch (error) {
     throw error;
   }
 };
 
-dbUsersService.deleteUser = async (id) => {
+dbUsersService.deleteUser = async (user) => {
   try {
+    const result = User.findByIdAndDelete(user.id);
+    await user.notes.forEach(async (note) => {
+      await Note.findByIdAndDelete(note);
+    });
+    return result;
   } catch (error) {
     throw error;
   }
