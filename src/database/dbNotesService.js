@@ -15,13 +15,18 @@ mongoose.connect(connectionString, {
 
 dbNotesService.getAllNotes = async () => {
   try {
-    const notes = await NotesModel.find();
+    const notes = await NotesModel.find({}).populate('user', {
+      username: 1,
+      name: 1,
+      _id: 0,
+    });
     const cleanedNotes = notes.map((note) => {
       return {
         id: note._id,
         content: note.content,
         important: note.important,
         date: note.date,
+        user: note.user,
       };
     });
     return cleanedNotes;

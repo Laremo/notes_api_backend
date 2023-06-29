@@ -15,7 +15,11 @@ mongoose.connect(connectionString, {
 
 dbUsersService.getAllUsers = async () => {
   try {
-    const retrievedUsers = await User.find();
+    const retrievedUsers = await User.find({}).populate('notes', {
+      content: 1,
+      date: 1,
+      _id: 0,
+    });
     return retrievedUsers;
   } catch (error) {
     throw error;

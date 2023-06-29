@@ -2,8 +2,8 @@ const dbNotesService = require('../database/dbNotesService');
 const dbUserService = require('../database/dbUsersService');
 const notesService = {};
 
-const cleanNoteData = ({ id, content, important, date }) => {
-  return { id, content, important, date };
+const cleanNoteData = ({ id, content, important, date, user }) => {
+  return { id, content, important, date, user };
 };
 
 notesService.SaveNote = async (noteToSave) => {
