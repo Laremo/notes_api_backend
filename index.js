@@ -1,7 +1,8 @@
 const express = require('express');
 const NotesRouter = require('./src/routes/notes');
-const cors = require('cors');
 const usersRouter = require('./src/routes/users');
+const loginRouter = require('./src/routes/login');
+const cors = require('cors');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -26,6 +27,8 @@ app.use('/api/notes', NotesRouter);
 
 //Crear controlador, servicios y middlewares para users :3
 app.use('/api/users', usersRouter);
+
+app.use('/api/login', loginRouter);
 
 //Page not found handler
 app.use((_, res) => {

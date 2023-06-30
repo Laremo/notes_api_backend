@@ -14,8 +14,11 @@ UsersService.getAllUsers = async () => {
   }
 };
 
-UsersService.getOneUser = async (id) => {
+UsersService.getOneUser = async (username) => {
   try {
+    const existingUser = await dbUsersService.getOneUser(username);
+    if (!existingUser) return { ok: false, user: 'user does not exist' };
+    return { ok: false, user: existingUser };
   } catch (error) {
     throw error;
   }
