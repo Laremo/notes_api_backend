@@ -34,6 +34,14 @@ dbUsersService.getOneUser = async (username) => {
     throw error;
   }
 };
+dbUsersService.getUserByID = async (id) => {
+  try {
+    const user = await User.findById(id);
+    return user;
+  } catch (error) {
+    throw error;
+  }
+};
 
 dbUsersService.saveUser = async ({ username, name, password }) => {
   try {

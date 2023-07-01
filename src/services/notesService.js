@@ -8,7 +8,7 @@ const cleanNoteData = ({ id, content, important, date, user }) => {
 
 notesService.SaveNote = async (noteToSave) => {
   try {
-    const user = await dbUserService.getOneUser(noteToSave.user);
+    const user = await dbUserService.getUserByID(noteToSave.user);
     if (!user) return { status: 400, response: 'User does not exist' };
     const { result, note } = await dbNotesService.saveNote(
       noteToSave,
