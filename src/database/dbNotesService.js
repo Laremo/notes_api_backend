@@ -22,7 +22,7 @@ dbNotesService.getAllNotes = async () => {
     });
     const cleanedNotes = notes.map((note) => {
       return {
-        id: note._id,
+        _id: note._id,
         content: note.content,
         important: note.important,
         date: note.date,
@@ -46,21 +46,9 @@ dbNotesService.getOneNote = async (id) => {
 
 dbNotesService.saveNote = async (note, isNew = true, user = undefined) => {
   try {
-    const retrievedNotes = await dbNotesService.getAllNotes();
     if (!note?.date) note.date = new Date();
     if (isNew) {
-      // retrievedNotes.forEach((nt) => {
-      //   if (nt.content === note.content && nt.important === note.important)
-      //     throw new Error('This note already exists');
-      // });
-      //Obtener el máximo Id
-      const { id } = retrievedNotes.reduce(
-        (note, currentNote) => (note.id > currentNote.id ? note : currentNote),
-        { id: 0 }
-      );
-      note.id = id + 1;
       const toSave = new NotesModel({
-        id: note.id,
         content: note.content,
         date: note.date,
         important: note.important,
@@ -78,6 +66,8 @@ dbNotesService.saveNote = async (note, isNew = true, user = undefined) => {
       { content: note.content, important: note.important },
       { new: true } //return the updated document
     );
+    user.notes = user.notes.concat(result._id);
+    user.save();
     if (!result) return { result: 0 };
     else return { result: 1, note: result };
   } catch (error) {

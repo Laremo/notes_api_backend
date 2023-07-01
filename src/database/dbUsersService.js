@@ -36,7 +36,7 @@ dbUsersService.getOneUser = async (username) => {
 };
 dbUsersService.getUserByID = async (id) => {
   try {
-    const user = await User.findById(id);
+    const user = await User.findOne({ _id: id });
     return user;
   } catch (error) {
     throw error;
