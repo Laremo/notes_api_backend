@@ -62,12 +62,11 @@ dbNotesService.saveNote = async (note, isNew = true, user = undefined) => {
     }
 
     const result = await NotesModel.findOneAndUpdate(
-      { id: note.id },
+      { _id: note._id },
       { content: note.content, important: note.important },
       { new: true } //return the updated document
     );
-    user.notes = user.notes.concat(result._id);
-    user.save();
+
     if (!result) return { result: 0 };
     else return { result: 1, note: result };
   } catch (error) {
@@ -77,7 +76,7 @@ dbNotesService.saveNote = async (note, isNew = true, user = undefined) => {
 
 dbNotesService.DeleteNote = async (id) => {
   try {
-    const result = await NotesModel.findOneAndRemove({ id: id });
+    const result = await NotesModel.findOneAndRemove({ _id: id });
     if (!result) return { result: 0 };
     return { result: 1 };
   } catch (error) {

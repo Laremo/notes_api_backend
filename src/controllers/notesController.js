@@ -18,10 +18,13 @@ notesController.SaveNote = async (req, res) => {
 notesController.UpdateNote = async (req, res) => {
   try {
     const { note: noteToUpdate } = req.body;
-    if (noteToUpdate.id !== +req.params.id)
-      res.status(400).json({ error: 'Bad request' });
-    if (!noteToUpdate || !noteToUpdate.content) {
+    if (!noteToUpdate || !noteToUpdate.content || !noteToUpdate.user) {
       res.status(400).json({ error: 'missing content' });
+      return;
+    }
+    if (noteToUpdate._id !== req.params.id) {
+      res.status(400).json({ error: 'discordant information' });
+      return;
     }
     const { status, response, note } = await notesService.UpdateNote(
       noteToUpdate
@@ -56,7 +59,7 @@ notesController.getOneNote = async (req, res) => {
 
 notesController.DeleteNote = async (req, res) => {
   try {
-    const id = +req.params.id;
+    const id = req.params.id;
     const { status, message } = await notesService.DeleteNote(id);
     if (status === 204) res.status(200).json(message);
     else res.status(status).json(message);

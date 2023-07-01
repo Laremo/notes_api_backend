@@ -15,7 +15,8 @@ notesService.SaveNote = async (noteToSave) => {
       true,
       user
     );
-    if (result === 1) return { status: 200, response: 'Saved changes', note };
+    if (result === 1)
+      return { status: 200, response: 'Saved changes', note: note };
   } catch (error) {
     throw error;
   }
@@ -23,6 +24,8 @@ notesService.SaveNote = async (noteToSave) => {
 
 notesService.UpdateNote = async (noteToUpdate) => {
   try {
+    const user = await dbUserService.getUserByID(noteToUpdate.user);
+    if (!user) return { status: 400, response: 'User does not exist' };
     const { result, note } = await dbNotesService.saveNote(noteToUpdate, false);
     if (result === 1)
       return {
