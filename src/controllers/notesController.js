@@ -45,7 +45,7 @@ notesController.GetAllNotes = async (_, res) => {
 
 notesController.getOneNote = async (req, res) => {
   try {
-    const id = Number(req.params.id);
+    const id = req.params.id;
     const { status, note } = await notesService.getOneNote(id);
     res.status(status).json(note);
   } catch (error) {

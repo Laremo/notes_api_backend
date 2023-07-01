@@ -37,7 +37,7 @@ dbNotesService.getAllNotes = async () => {
 
 dbNotesService.getOneNote = async (id) => {
   try {
-    const note = await NotesModel.find({ id: id });
+    const note = await NotesModel.find({ _id: id });
     return note;
   } catch (error) {
     throw new Error(error);
