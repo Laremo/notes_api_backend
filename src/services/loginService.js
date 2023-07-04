@@ -1,4 +1,5 @@
 const dbUsersService = require('../database/dbUsersService');
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const loginService = {};
 
@@ -12,7 +13,13 @@ loginService.validateLogin = async (user) => {
   if (!correctPass)
     return { status: 401, result: 'Incorrect Username or Password' };
 
-  return { status: 200, result: exisitingUser };
+  const { _id, username, name } = exisitingUser;
+
+  const tokenData = { id: _id, username: username, name: name };
+
+  const token = jwt.sign(tokenData, process.env.SECRET, { expiresIn: '2h' });
+
+  return { status: 200, result: { username, name, _id, token } };
 };
 
 module.exports = loginService;

@@ -3,7 +3,8 @@ const NotesRouter = require('./src/routes/notes');
 const usersRouter = require('./src/routes/users');
 const loginRouter = require('./src/routes/login');
 const cors = require('cors');
-
+const CheckLoggedUser = require('./middleware/checkLoggedUser');
+const dotenv = require('dotenv').config({ path: '.env' });
 const PORT = process.env.PORT || 3001;
 const app = express();
 app.use(express.json());
@@ -23,10 +24,10 @@ app.use((_, res, next) => {
 
 app.get('/', (req, res) => res.send(`<h1>there is nothing here</h1>`));
 
-app.use('/api/notes', NotesRouter);
+app.use('/api/notes', CheckLoggedUser, NotesRouter);
 
 //Crear controlador, servicios y middlewares para users :3
-app.use('/api/users', usersRouter);
+app.use('/api/users', CheckLoggedUser, usersRouter);
 
 app.use('/api/login', loginRouter);
 
