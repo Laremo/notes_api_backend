@@ -17,7 +17,7 @@ loginService.validateLogin = async (user) => {
 
   const tokenData = { id: _id, username: username, name: name };
 
-  const token = jwt.sign(tokenData, process.env.SECRET, { expiresIn: 120 });
+  const token = jwt.sign(tokenData, process.env.SECRET, { expiresIn: 180 });
 
   return { status: 200, result: { username, name, _id, token } };
 };

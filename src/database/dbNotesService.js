@@ -58,7 +58,7 @@ dbNotesService.saveNote = async (note, isNew = true, user = undefined) => {
       const savedNote = await toSave.save();
       user.notes = user.notes.concat(savedNote._id);
       user.save();
-      return { result: 1, savedNote };
+      return { result: 1, note: savedNote };
     }
 
     const result = await NotesModel.findOneAndUpdate(

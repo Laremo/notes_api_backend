@@ -15,8 +15,7 @@ notesService.SaveNote = async (noteToSave) => {
       true,
       user
     );
-    if (result === 1)
-      return { status: 200, response: 'Saved changes', note: note };
+    if (result === 1) return { status: 200, response: note };
   } catch (error) {
     throw error;
   }
